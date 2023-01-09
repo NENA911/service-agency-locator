@@ -1,0 +1,215 @@
+openapi: 3.0.1
+info:
+  title: Service/Agency Locator
+  version: "1.0"
+servers:
+  - url: http://localhost/ServiceAgencyLocator/v1
+paths:
+  /LocatorRecordUris:
+    get:
+      tags:
+        - SearchByName
+      summary: Retrieves Service/Agency Locator Records URIs
+      operationId: SearchByName
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of results to return
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start
+          in: query
+          description: First item in the page of results, as an ordinal 1-based integer
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: serviceAgencyName
+          in: query
+          description: Name of the Service or Agency, wildcards can be used
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: URIs found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocatorRecordUriArray'
+        '404':
+          description: Not found
+        '454':
+          description: Unspecified Error
+  /NameSets:
+    get:
+      tags:
+        - InterESInetSearchIndex
+      summary: Retrieves Service/Agency names the Locator is aware of
+      operationId: InterESInetSearchIndex
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of results to return
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start
+          in: query
+          description: First item in the page of results, as an ordinal 1-based integer
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: Namesets found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NameSetArray'
+        '404':
+          description: Not found
+        '441':
+          description: Index beyond available names
+        '454':
+          description: Unspecified Error
+  /Versions:
+    servers:
+      - url: https://api.example.com/ServiceAgencyLocator
+        description: Override base path for Versions query
+    get:
+      tags:
+        - RetrieveVersions
+      summary: Retrieves all supported versions, vendor parameter is optional.
+      operationId: RetrieveVersions
+      responses:
+        '200':
+          description: Versions found
+          content:
+            application/json:
+              schema:
+                $ref: 'i3-common.yaml#/components/schemas/VersionsArray'
+components:
+  schemas:
+    LocatorRecordUriArray:
+      type: object
+      required:
+        - count
+        - totalCount
+        - locatorUris
+      properties:
+        count:
+          type: integer
+          format: int32
+          description: Number of items in the array
+        totalCount:
+          type: integer
+          format: int32
+          description: Total number of items found
+        locatorUris:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocatorRecordUri'
+          description: Array of Locator URI objects
+    NameSetArray:
+      type: object
+      required:
+        - count
+        - totalCount
+        - nameSets
+      properties:
+        count:
+          type: integer
+          format: int32
+          description: Number of items in the array
+        totalCount:
+          type: integer
+          format: int32
+          description: Total number of items found
+        nameSets:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameSet'
+          description: Array of Name Sets objects
+    LocatorRecordUri:
+      type: object
+      required:
+        - locatorRecordUri
+        - serviceAgencyName
+        - uriType
+      properties:
+        uri:
+          type: string
+          format: uri
+        serviceAgencyName:
+          type: string
+        uriType:
+          type: string
+          enum: [RecordUri, ReferralUri]
+    LocatorRecord:
+      type: object
+      required:
+        - recordId
+        - serviceAgencyId
+        - serviceAgencyName
+        - serviceAgencyJcard
+        - serviceAgencyTypes
+        - loggerUri
+      properties:
+        recordId:
+          type: string
+        serviceAgencyId:
+          type: string
+        serviceAgencyName:
+          type: string
+        serviceAgencyJcard:
+          type: string
+        serviceAgencyTypes:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        emergencySipInterfaceUri:
+          type: string
+          format: uri
+        adminLineUri:
+          type: string
+          format: uri
+        loggerUri:
+          type: string
+          format: uri
+        eidoInterfaceUri:
+          type: string
+          format: uri
+        mdsFeatureInterfaceUri:
+          type: string
+          format: uri
+        mdsImageInterfaceUri:
+          type: string
+          format: uri
+        svcStateUri:
+          type: string
+          format: uri
+        dscRptUri:
+          type: string
+          format: uri
+        headJcard:
+          type: string
+        onDutySuperJcard:
+          type: string
+    NameSet:
+      type: object
+      properties:
+        locatorUri:
+          type: string
+          format: uri
+        names:
+          type: array
+          items:
+            type: string
