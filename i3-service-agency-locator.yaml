@@ -35,13 +35,13 @@ paths:
             type: string
       responses:
         '200':
-          description: URIs found
+          description: URIs Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LocatorRecordUriArray'
         '404':
-          description: Not found
+          description: Not Found
         '454':
           description: Unspecified Error
   /NameSets:
@@ -68,15 +68,15 @@ paths:
             minimum: 1
       responses:
         '200':
-          description: Namesets found
+          description: Namesets Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/NameSetArray'
         '404':
-          description: Not found
+          description: Not Found
         '441':
-          description: Index beyond available names
+          description: Index Beyond Available Names
         '454':
           description: Unspecified Error
   /Versions:
@@ -90,7 +90,7 @@ paths:
       operationId: RetrieveVersions
       responses:
         '200':
-          description: Versions found
+          description: Versions Found
           content:
             application/json:
               schema:
