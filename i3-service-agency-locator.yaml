@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Service/Agency Locator
-  version: "1.0"
+  version: "1.0.1"
 servers:
   - url: http://localhost/ServiceAgencyLocator/v1
 paths:
@@ -140,7 +140,7 @@ components:
     LocatorRecordUri:
       type: object
       required:
-        - locatorRecordUri
+        - uri
         - serviceAgencyName
         - uriType
       properties:
